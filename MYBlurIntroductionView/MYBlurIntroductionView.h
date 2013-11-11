@@ -27,6 +27,12 @@ typedef enum {
     MYLanguageDirectionRightToLeft
 }MYLanguageDirection;
 
+//Enum to determine which button was pressed
+typedef enum {
+    MYLeftButton = 0,
+    MYRightButton
+}MYButtonType;
+
 @class MYBlurIntroductionView;
 
 /******************************/
@@ -34,6 +40,7 @@ typedef enum {
 /******************************/
 @protocol MYIntroductionDelegate
 @optional
+-(void)introduction:(MYBlurIntroductionView *)introductionView didPressButton:(MYButtonType)buttonType;
 -(void)introduction:(MYBlurIntroductionView *)introductionView didFinishWithType:(MYFinishType)finishType;
 -(void)introduction:(MYBlurIntroductionView *)introductionView didChangeToPanel:(MYIntroductionPanel *)panel withIndex:(NSInteger)panelIndex;
 @end
@@ -64,12 +71,13 @@ typedef enum {
 @property (nonatomic, assign) NSInteger CurrentPanelIndex;
 @property (nonatomic, assign) MYLanguageDirection LanguageDirection;
 @property (nonatomic, retain) UIColor *UserBackgroundColor;
+@property (nonatomic, assign) BOOL allowCustomSkipButtonActions;
 
 //Construction Methods
 -(void)buildIntroductionWithPanels:(NSArray *)panels;
 
 //Interaction Methods
-- (IBAction)didPressSkipButton;
+- (IBAction)didPressSkipButton:(id)sender;
 
 // index is relative to the array of panels passed in.
 -(void)changeToPanelAtIndex:(NSInteger)index;

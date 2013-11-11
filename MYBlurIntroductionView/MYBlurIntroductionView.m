@@ -22,6 +22,9 @@
 }
 
 -(void)initializeViewComponents{
+    //Custom skip buttons
+    self.allowCustomSkipButtonActions = NO;
+    
     //Background Image View
     self.BackgroundImageView = [[UIImageView alloc] initWithFrame:self.frame];
     self.BackgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -62,7 +65,7 @@
     self.LeftSkipButton.frame = CGRectMake(10, self.frame.size.height - 48, 46, 37);
     [self.LeftSkipButton setTitle:skipString forState:UIControlStateNormal];
     [self.LeftSkipButton.titleLabel setFont:kSkipButtonFont];
-    [self.LeftSkipButton addTarget:self action:@selector(didPressSkipButton) forControlEvents:UIControlEventTouchUpInside];
+    [self.LeftSkipButton addTarget:self action:@selector(didPressSkipButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.LeftSkipButton];
     
     //Right Skip Button
@@ -70,7 +73,7 @@
     self.RightSkipButton.frame = CGRectMake(self.frame.size.width - skipStringWidth - kLeftRightSkipPadding, self.frame.size.height - 48, skipStringWidth, 37);
     [self.RightSkipButton.titleLabel setFont:kSkipButtonFont];
     [self.RightSkipButton setTitle:skipString forState:UIControlStateNormal];
-    [self.RightSkipButton addTarget:self action:@selector(didPressSkipButton) forControlEvents:UIControlEventTouchUpInside];
+    [self.RightSkipButton addTarget:self action:@selector(didPressSkipButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.RightSkipButton];
 }
 
@@ -341,8 +344,21 @@
 
 #pragma mark - Interaction Methods
 
-- (void)didPressSkipButton {
-    [self skipIntroduction];
+- (void)didPressSkipButton:(id)sender {
+    if(!_allowCustomSkipButtonActions) {
+        [self skipIntroduction];
+        return;
+    }
+    
+    if(sender == self.LeftSkipButton) {
+        if ([(id)delegate respondsToSelector:@selector(introduction:didPressButton:)]) {
+            [delegate introduction:self didPressButton:MYLeftButton];
+        }
+    } else if(sender == self.RightSkipButton) {
+        if ([(id)delegate respondsToSelector:@selector(introduction:didPressButton:)]) {
+            [delegate introduction:self didPressButton:MYRightButton];
+        }
+    }
 }
 
 -(void)skipIntroduction{

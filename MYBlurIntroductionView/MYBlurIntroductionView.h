@@ -33,6 +33,15 @@ typedef enum {
     MYRightButton
 }MYButtonType;
 
+//Enum to decide to show both buttons or standard behavior
+typedef enum {
+    MYStandardBehavior = 0,
+    MYShowLeftButton,
+    MYShowRightButton,
+    MYShowBothButtons
+    
+}MYButtonBehaviorType;
+
 @class MYBlurIntroductionView;
 
 /******************************/
@@ -71,7 +80,7 @@ typedef enum {
 @property (nonatomic, assign) NSInteger CurrentPanelIndex;
 @property (nonatomic, assign) MYLanguageDirection LanguageDirection;
 @property (nonatomic, retain) UIColor *UserBackgroundColor;
-@property (nonatomic, assign) BOOL allowCustomSkipButtonActions;
+@property (nonatomic, assign) MYButtonBehaviorType ButtonBehavior;
 
 //Construction Methods
 -(void)buildIntroductionWithPanels:(NSArray *)panels;

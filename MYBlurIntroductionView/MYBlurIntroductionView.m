@@ -23,7 +23,7 @@
 
 -(void)initializeViewComponents{
     //Custom skip buttons
-    self.allowCustomSkipButtonActions = NO;
+    [self setButtonBehavior:MYStandardBehavior];
     
     //Background Image View
     self.BackgroundImageView = [[UIImageView alloc] initWithFrame:self.frame];
@@ -174,13 +174,13 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 #pragma mark - UIScrollView Delegate
 
@@ -345,7 +345,7 @@
 #pragma mark - Interaction Methods
 
 - (void)didPressSkipButton:(id)sender {
-    if(!_allowCustomSkipButtonActions) {
+    if(self.ButtonBehavior == MYStandardBehavior) {
         [self skipIntroduction];
         return;
     }
@@ -415,7 +415,7 @@
 
 -(void)setEnabled:(BOOL)enabled{
     [UIView animateWithDuration:0.3 animations:^{
-        if (enabled) {
+        if (enabled && self.ButtonBehavior == MYStandardBehavior) {
             if (self.LanguageDirection == MYLanguageDirectionLeftToRight) {
                 self.LeftSkipButton.alpha = !enabled;
                 self.RightSkipButton.alpha = enabled;
@@ -425,6 +425,11 @@
                 self.RightSkipButton.alpha = !enabled;
             }
             
+            self.MasterScrollView.scrollEnabled = YES;
+        }
+        else if (enabled && self.ButtonBehavior != MYStandardBehavior) {
+            self.LeftSkipButton.alpha = enabled;
+            self.RightSkipButton.alpha = enabled;
             self.MasterScrollView.scrollEnabled = YES;
         }
         else {
